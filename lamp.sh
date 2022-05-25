@@ -38,6 +38,7 @@ read -p "请输入网站名称（英文）:" domain
     acme.sh --set-default-ca --server letsencrypt
     green "已输入的域名：$domain"
 	mkdir -p /var/www/$domain
+	mkdir -p /var/www/$domain/log
     realip=$(curl -sm8 ip.sb)
     domainIP=$(curl -sm8 ipget.net/?ip="$domain")
     if [ $realip  ==  $domainIP ]
@@ -56,8 +57,8 @@ cat >> /etc/apache2/sites-available/$domain.conf << EOF
 	DocumentRoot /var/www/$domain
 	DirectoryIndex index.php index.html index.htm
 	
-	ErrorLog ${APACHE_LOG_DIR}/$domain.error.log
-	CustomLog ${APACHE_LOG_DIR}/$domain.access.log combined
+	ErrorLog /var/www/$domain/$domain.error.log
+	CustomLog /var/www/$domain/$domain.access.log combined
 
 	<Directory /var/www/$domain>
 		Options FollowSymLinks
