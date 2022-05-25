@@ -31,6 +31,7 @@ a2enmod mime
 a2enmod setenvif
 systemctl restart php8.1-fpm
 mkdir -p /var/www/ssl
+systemctl stop apache2
 read -p "请输入网站名称（英文）:" domain
     curl https://get.acme.sh | sh
     ln -s  /root/.acme.sh/acme.sh /usr/local/bin/acme.sh
