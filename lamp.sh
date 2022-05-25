@@ -37,6 +37,7 @@ read -p "请输入网站名称（英文）:" domain
     ln -s  /root/.acme.sh/acme.sh /usr/local/bin/acme.sh
     acme.sh --set-default-ca --server letsencrypt
     green "已输入的域名：$domain"
+	mkdir -p /var/www/$domain
     realip=$(curl -sm8 ip.sb)
     domainIP=$(curl -sm8 ipget.net/?ip="$domain")
     if [ $realip  ==  $domainIP ]
@@ -87,7 +88,6 @@ a2ensite $domain.conf
 a2dissite 000-default.conf
 apache2ctl configtest
 systemctl restart apache2
-mkdir -p /var/www/$domain
 cat >> /var/www/$domain/index.html << EOF
 <html>
 	<h2>It works</h2>
