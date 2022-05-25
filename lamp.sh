@@ -32,6 +32,22 @@ a2enmod setenvif
 systemctl restart php8.1-fpm
 mkdir -p /var/www/ssl
 read -p "请输入网站名称（英文）:" domain
+    curl https://get.acme.sh | sh
+    ln -s  /root/.acme.sh/acme.sh /usr/local/bin/acme.sh
+    acme.sh --set-default-ca --server letsencrypt
+    green "已输入的域名：$domain"
+    realip=$(curl -sm8 ip.sb)
+    domainIP=$(curl -sm8 ipget.net/?ip="$domain")
+    if [ $realip  ==  $domainIP ]
+    then
+        echo '域名解析OK' && sleep 3;
+        bash ~/.acme.sh/acme.sh --issue -d ${domain} --standalone -k ec-256;
+        bash ~/.acme.sh/acme.sh --install-cert -d ${domain} --key-file /var/www/ssl/$domain.key --fullchain-file /var/www/ssl/$domain.crt --ecc;
+        green "证书申请成功！脚本申请到的证书（cert.crt）和私钥（private.key）已保存到 /var/www/ssl 文件夹";
+    else
+        echo '请检查域名是否已解析到该VPS' && sleep 3;
+        
+    fi
 cat >> /etc/apache2/sites-available/$domain.conf << EOF
 <VirtualHost *:80>
 	ServerName $domain
