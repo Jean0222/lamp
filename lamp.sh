@@ -30,6 +30,7 @@ a2enmod deflate
 a2enmod mime
 a2enmod setenvif
 systemctl restart php8.1-fpm
+mkdir -p /var/www/ssl
 read -p "请输入网站名称（英文）:" domain
 cat >> /etc/apache2/sites-available/$domain.conf << EOF
 <VirtualHost *:80>
@@ -44,6 +45,24 @@ cat >> /etc/apache2/sites-available/$domain.conf << EOF
 		Options FollowSymLinks
 		AllowOverride All
 		Require all granted
+	</Directory>
+</VirtualHost>
+<VirtualHost *:443> 
+    	ServerName  $domain                    
+    	DocumentRoot  /var/www/$domain
+	ErrorLog "/var/www/$domain/log/error.log"
+	CustomLog "/var/www/$domain/log/access.log" combined        
+   	SSLEngine on   
+    	SSLProtocol all -SSLv2 -SSLv3
+    	SSLCipherSuite HIGH:!RC4:!MD5:!aNULL:!eNULL:!NULL:!DH:!EDH:!EXP:+MEDIUM
+   	SSLHonorCipherOrder on
+   	SSLCertificateFile /var/www/ssl/$domain.crt
+   	SSLCertificateKeyFile /var/www/ssl/$domain.key
+	<FilesMatch "\.(cgi|shtml|phtml|php)$">
+		SSLOptions +StdEnvVars
+	</FilesMatch>
+	<Directory /usr/lib/cgi-bin>
+		SSLOptions +StdEnvVars
 	</Directory>
 </VirtualHost>
 EOF
