@@ -6,7 +6,6 @@ sudo apt update && sudo apt upgrade -y && sudo apt install curl vim wget gnupg a
 sudo apt autoremove -y
 #加入PHP最新版源
 add-apt-repository ppa:ondrej/php
-echo -ne '\n'
 sudo apt update && sudo apt upgrade -y
 #安装PHP8.1
 apt install php8.1-fpm php8.1-cli php8.1-mysql php8.1-curl php8.1-gd php8.1-mbstring php8.1-xml php8.1-zip php8.1-imap php8.1-opcache php8.1-soap php8.1-gmp php8.1-bcmath -y
@@ -17,10 +16,8 @@ sed -i 's/upload_max_filesize = 2M/upload_max_filesize = 10M/' /etc/php/8.1/fpm/
 sed -i 's/post_max_size = 8M/post_max_size = 10M/' /etc/php/8.1/fpm/php.ini
 #增加 Apache 源
 add-apt-repository ppa:ondrej/apache2
-echo -ne '\n'
 sudo apt update && sudo apt upgrade -y && sudo apt install apache2 -y
 #green "Apache Version:"apache2 -v
-sleep 5
 a2enconf php8.1-fpm
 a2enmod proxy_fcgi
 a2enmod headers
@@ -55,6 +52,11 @@ a2dissite 000-default.conf
 apache2ctl configtest
 systemctl restart apache2
 mkdir -p /var/www/$domain
+cat >> /var/www/$domain/index.html << EOF
+<html>
+	<h2>It works</h2>
+</html>
+EOF
 cat >> /var/www/$domain/phpinfo.php << EOF
 <?php phpinfo(); ?>
 EOF
