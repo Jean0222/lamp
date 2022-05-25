@@ -2,7 +2,7 @@
 green() {
     echo -e "\033[32m\033[01m$1\033[0m"
 }
-sudo apt update && sudo apt upgrade -y && sudo apt install curl vim wget gnupg apt-transport-https lsb-release ca-certificates -y
+sudo apt update && sudo apt upgrade -y && sudo apt install curl vim wget gnupg apt-transport-https lsb-release ca-certificates socat -y
 sudo apt autoremove -y
 #加入PHP最新版源
 add-apt-repository ppa:ondrej/php
