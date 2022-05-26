@@ -2,7 +2,7 @@
 green() {
     echo -e "\033[32m\033[01m$1\033[0m"
 }
-sudo apt update && sudo apt upgrade -y && sudo apt install curl vim wget gnupg apt-transport-https lsb-release ca-certificates socat -y
+sudo apt update && sudo apt upgrade -y && sudo apt install curl vim wget gnupg apt-transport-https lsb-release ca-certificates socat unzip -y
 sudo apt autoremove -y
 #加入PHP最新版源
 #add-apt-repository ppa:ondrej/php
@@ -103,3 +103,8 @@ wget -O /usr/share/keyrings/mariadb.asc https://mariadb.org/mariadb_release_sign
 echo "deb [signed-by=/usr/share/keyrings/mariadb.asc] https://mirror-cdn.xtom.com/mariadb/repo/10.6/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/mariadb.list
 sudo apt update && sudo apt install mariadb-server  -y
 systemctl enable mariadb
+cd /var/www/$domain
+wget https://cn.wordpress.org/latest-zh_CN.zip
+unzip latest-zh_CN.tar.gz
+mv latest-zh_CN.tar.gz/* .
+rm latest-zh_CN.tar.gz
