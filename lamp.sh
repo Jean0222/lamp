@@ -105,6 +105,6 @@ sudo apt update && sudo apt install mariadb-server  -y
 systemctl enable mariadb
 cd /var/www/$domain
 wget https://cn.wordpress.org/latest-zh_CN.zip
-unzip latest-zh_CN.tar.gz
-mv latest-zh_CN.tar.gz/* .
-rm latest-zh_CN.tar.gz
+unzip latest-zh_CN.zip
+mv latest-zh_CN.zip/* .
+rm latest-zh_CN.zip
