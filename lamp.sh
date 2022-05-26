@@ -106,5 +106,5 @@ systemctl enable mariadb
 cd /var/www/$domain
 wget https://cn.wordpress.org/latest-zh_CN.zip
 unzip latest-zh_CN.zip
-mv latest-zh_CN.zip/* .
+mv wordpress/* .
 rm latest-zh_CN.zip
