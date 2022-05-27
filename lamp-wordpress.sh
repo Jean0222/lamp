@@ -3,6 +3,8 @@ green() {
     echo -e "\033[32m\033[01m$1\033[0m"
 }
 sudo apt update && sudo apt upgrade -y && sudo apt install curl vim wget gnupg apt-transport-https lsb-release ca-certificates socat unzip -y
+sudo ufw allow 80
+sudo ufw allow 443
 sudo apt autoremove -y
 #加入PHP最新版源
 #add-apt-repository ppa:ondrej/php
@@ -81,11 +83,6 @@ a2ensite $domain.conf
 a2dissite 000-default.conf
 apache2ctl configtest
 systemctl restart apache2
-cat >> /var/www/$domain/index.html << EOF
-<html>
-	<h2>It works</h2>
-</html>
-EOF
 cat >> /var/www/$domain/phpinfo.php << EOF
 <?php phpinfo(); ?>
 EOF
