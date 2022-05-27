@@ -55,36 +55,26 @@ read -p "请输入网站名称（英文）:" domain
     fi
 cat >> /etc/apache2/sites-available/$domain.conf << EOF
 <VirtualHost *:80>
-	ServerName $domain
-	DocumentRoot /var/www/$domain
-	DirectoryIndex index.php index.html index.htm
-	
-	ErrorLog /var/www/$domain/$domain.error.log
-	CustomLog /var/www/$domain/$domain.access.log combined
-
-	<Directory /var/www/$domain>
-		Options FollowSymLinks
-		AllowOverride All
-		Require all granted
-	</Directory>
+	RewriteEngine On
+    RewriteCond %{REQUEST_URI} !^/\.well\-known/acme\-challenge/
+    RewriteRule ^(.*)$ https://%{HTTP_HOST}$1 [R=301,L]
 </VirtualHost>
 <VirtualHost *:443> 
-    	ServerName  $domain                    
-    	DocumentRoot  /var/www/$domain
+    ServerName  $domain                    
+    DocumentRoot  /var/www/$domain
 	ErrorLog "/var/www/$domain/log/error.log"
 	CustomLog "/var/www/$domain/log/access.log" combined        
    	SSLEngine on   
-    	SSLProtocol all -SSLv2 -SSLv3
-    	SSLCipherSuite HIGH:!RC4:!MD5:!aNULL:!eNULL:!NULL:!DH:!EDH:!EXP:+MEDIUM
+    SSLProtocol all -SSLv2 -SSLv3
+    SSLCipherSuite HIGH:!RC4:!MD5:!aNULL:!eNULL:!NULL:!DH:!EDH:!EXP:+MEDIUM
    	SSLHonorCipherOrder on
    	SSLCertificateFile /var/www/ssl/$domain.crt
    	SSLCertificateKeyFile /var/www/ssl/$domain.key
-	<FilesMatch "\.(cgi|shtml|phtml|php)$">
-		SSLOptions +StdEnvVars
-	</FilesMatch>
-	<Directory /usr/lib/cgi-bin>
-		SSLOptions +StdEnvVars
-	</Directory>
+	<Directory "/var/www/$domain">
+		Options FollowSymLinks
+		AllowOverride All
+		Require all granted
+    </Directory>
 </VirtualHost>
 EOF
 a2ensite $domain.conf
@@ -108,3 +98,16 @@ wget https://cn.wordpress.org/latest-zh_CN.zip
 unzip latest-zh_CN.zip
 mv wordpress/* .
 rm latest-zh_CN.zip
+#www跳转到不带www
+cat >> /var/www/$domain/.htaccess << EOF
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteBase /
+RewriteRule ^index\.php$ - [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule . /index.php [L]
+RewriteCond %{http_host} ^www.$domain [NC]
+RewriteRule ^(.*)$ https://$domain/$1 [L,R=301]
+</IfModule>
+EOF
