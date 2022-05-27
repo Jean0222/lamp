@@ -103,8 +103,3 @@ wget -O /usr/share/keyrings/mariadb.asc https://mariadb.org/mariadb_release_sign
 echo "deb [signed-by=/usr/share/keyrings/mariadb.asc] https://mirror-cdn.xtom.com/mariadb/repo/10.6/ubuntu $(lsb_release -sc) main" > /etc/apt/sources.list.d/mariadb.list
 sudo apt update && sudo apt install mariadb-server  -y
 systemctl enable mariadb
-cd /var/www/$domain
-wget https://cn.wordpress.org/latest-zh_CN.zip
-unzip latest-zh_CN.zip
-mv wordpress/* .
-rm latest-zh_CN.zip
