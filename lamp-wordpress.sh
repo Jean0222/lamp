@@ -43,7 +43,7 @@ read -p "请输入网站名称（英文）:" domain
     green "已输入的域名：$domain"
 	mkdir -p /var/www/$domain
 	mkdir -p /var/www/$domain/log
-    realip=$(curl -sm8 ip.sb)
+    realip=$(curl ipv4.ip.sb)
     domainIP=$(curl -sm8 ipget.net/?ip="$domain")
     if [ $realip  ==  $domainIP ]
     then
