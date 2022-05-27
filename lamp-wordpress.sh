@@ -111,3 +111,4 @@ RewriteCond %{http_host} ^www.$domain [NC]
 RewriteRule ^(.*)$ https://$domain/$1 [L,R=301]
 </IfModule>
 EOF
+systemctl restart apache2
