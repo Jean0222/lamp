@@ -95,6 +95,9 @@ wget https://cn.wordpress.org/latest-zh_CN.zip
 unzip latest-zh_CN.zip
 mv wordpress/* .
 rm latest-zh_CN.zip
+#解决插入主题权限问题
+cd /var/www
+chown www-data:www-data -R $domain/
 #www跳转到不带www
 cat >> /var/www/$domain/.htaccess << EOF
 <IfModule mod_rewrite.c>
